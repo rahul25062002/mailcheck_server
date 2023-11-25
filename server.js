@@ -11,6 +11,8 @@ import { verifyToken, mailInsert, getMail } from "./controller/Mail.js";
 import mongoose from 'mongoose'
 import cors from 'cors'
 import morgan from 'morgan';
+import dotenv from "dotenv";
+dotenv.config();
 
 
 
@@ -32,11 +34,12 @@ app.post('/auth/login',login);
 app.post('/sendMail',verifyToken,mailInsert);
 app.get('/getMail',verifyToken,getMail);
 
+console.log(process.env.PORT);
 
 
 mongoose
   .connect(
-    "mongodb+srv://mmgbrahul:Kumar@cluster16.jyzpkjf.mongodb.net/?retryWrites=true&w=majority",
+    process.env.MONGODB,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,

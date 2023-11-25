@@ -4,6 +4,8 @@ import database from '../database.js'
 import bcrypt from 'bcrypt'
 // const jwt=require('./jsonwebtoken')
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 
   export const register= async (req,res)=>{
@@ -46,13 +48,14 @@ export const login= async (req,res)=>{
           if(!email) return res.status(401).json({message: "email"});
           if(!password) return res.status(401).json({message: "password"});
 
-        const JWT_SECRET="vbsvnufjdffjcxcx";
+        const jwtkey=process.env.JWT_SECRET;
+        
         const user=await database.findOne({myemail:email});
         if(!user) return res.status(404).json({message:"Invalid crediantial"}); 
         console.log(user);
         const isMatch=await bcrypt.compare(password,user.password);
         if(!isMatch)  return res.status(404).json({message:"Invalid Password"});
-       const token = jwt.sign({ userId: user._id }, JWT_SECRET);
+       const token = jwt.sign({ userId: user._id }, jwtkey);
 
 
         // delete user.password;
